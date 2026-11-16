@@ -20,7 +20,7 @@ h1{font-size:20px;font-weight:600;margin:0}
 details{background:var(--card);border:1px solid var(--bd);border-radius:12px;margin-bottom:10px}
 summary{padding:12px 14px;cursor:pointer;font-weight:600;display:flex;justify-content:space-between;gap:8px;list-style:none}
 summary::-webkit-details-marker{display:none}
-summary small{font-weight:400;color:var(--mut)}
+summary small{font-weight:400;color:var(--mut);text-align:right}
 table{width:100%;border-collapse:collapse;font-size:14px}
 td{border-top:1px solid var(--bd);padding:9px 8px;vertical-align:top}
 td.dia{width:58px;color:var(--mut);font-size:13px;white-space:nowrap}
@@ -28,6 +28,7 @@ td.ck{width:40px;text-align:center}
 tr.hoy td{background:var(--accbg)}
 tr.done .ses{text-decoration:line-through;color:var(--mut)}
 .ses{font-weight:500}
+.meta{display:inline-block;font-size:12.5px;font-weight:600;color:var(--acc);margin-top:1px}
 .det{font-size:12.5px;color:var(--mut)}
 .note{font-size:13px;color:var(--mut);padding:0 14px 10px}
 input[type=checkbox]{width:22px;height:22px;accent-color:var(--ok)}
@@ -41,7 +42,8 @@ input[type=checkbox]{width:22px;height:22px;accent-color:var(--ok)}
 <div style="font-size:13px;color:var(--mut)" id="prog"></div>
 <div class="bar"><span id="progbar" style="width:0"></span></div>
 <div id="weeks"></div>
-<p class="foot">Ritmos: suave 5:35–6:05 · ritmo maratón (RM) 4:55–5:00 · umbral 4:30–4:38 · VO2máx 4:08–4:15 /km.<br>
+<p class="foot">Tiempos estimados con los ritmos medios de cada zona, calentamiento y recuperaciones incluidos.<br>
+Ritmos: suave 5:35–6:05 · ritmo maratón (RM) 4:55–5:00 · umbral 4:30–4:38 · VO2máx 4:08–4:15 /km.<br>
 Las casillas marcadas se guardan solo en este navegador. Si el plan cambia tras una revisión, se actualiza este archivo.</p>
 
 <script>
@@ -49,34 +51,56 @@ const RACE = new Date(2027, 2, 7);   // domingo 7 mar 2027
 const WEEKS = 17;
 const START = new Date(RACE); START.setDate(START.getDate() - (WEEKS * 7 - 1)); // lunes semana 1
 
-const E  = (k, st) => ['Rodaje suave ' + k + ' km' + (st ? ' + ' + st + ' rectas' : ''), 'Suave 5:35–6:05' + (st ? '. Al final ' + st + '×20" rápidas con 1\' trote' : ''), k + (st ? 1 : 0)];
-const L  = (k, mp) => ['Tirada larga ' + k + ' km', mp ? (k - mp) + ' km suave + últimos ' + mp + ' km a RM' : 'Todo suave 5:35–6:05. Practica geles si pasa de 90\'', k];
-const I  = (t, d, k) => [t, '3 km calentamiento, ' + d + ', 2 km vuelta a la calma', k];
-const H  = (r, s) => ['Cuestas ' + r + '×' + s + '"', '3 km calentamiento, ' + r + ' subidas a esfuerzo de 5K, bajada trotando, 2 km suaves', 8];
-const TP = m => ['Tempo ' + m + '\' a umbral', '3 km calentamiento, ' + m + '\' a 4:30–4:38, 2 km vuelta a la calma', 5 + Math.round(m / 4.6)];
-const MR = k => [k + ' km a ritmo maratón', '2 km suave, ' + k + ' km a 4:55–5:00, 2 km suave', k + 4];
-const PR = (e, m) => ['Progresivo ' + (e + m) + ' km', e + ' km suave + ' + m + ' km a RM', e + m];
-const REST = ['Descanso', '', 0], GYM = ['Fuerza en gimnasio', 'Glúteo medio, sentadilla unipodal, puente, peso muerto rumano y gemelo (40\')', 0];
+// Ritmo medio por zona (min/km) para estimar tiempos
+const PM = { R: 6.42, E: 5.83, MP: 4.97, T: 4.57, I: 4.2, S: 3.7 };
+const WC = { km: 5, min: 3 * PM.E + 2 * PM.E };  // 3 km calentamiento + 2 km vuelta a la calma
+const DESC = { MP: '4:55–5:00', T: '4:30–4:38', I: '4:08–4:15', S: '3:35–3:50' };
 
-// [fase, nota, martes, miércoles, jueves, sábado, domingo]
+// Cada sesión: [título, descripción, km, minutos]
+const E  = (k, st) => ['Rodaje suave ' + k + ' km' + (st ? ' + ' + st + ' rectas' : ''),
+  'Suave 5:35–6:05' + (st ? '. Al final ' + st + '×20" rápidas con 1\' trote' : ''),
+  k + (st ? st * 0.25 : 0), k * PM.E + (st ? st * 80 / 60 : 0)];
+const L  = (k, mp = 0) => ['Tirada larga ' + k + ' km',
+  mp ? (k - mp) + ' km suave + últimos ' + mp + ' km a RM' : 'Todo suave 5:35–6:05. Practica geles si pasa de 90\'',
+  k, (k - mp) * PM.E + mp * PM.MP];
+// Series: r repeticiones de v (km o min) en zona z, con rec minutos de trote
+const I  = (t, r, v, u, z, rec) => {
+  const work = u === 'km' ? r * v * PM[z] : r * v, workKm = u === 'km' ? r * v : r * v / PM[z];
+  const d = r + '×' + (u === 'km' ? (v < 1 ? v * 1000 + ' m' : v + ' km') : v + '\'') + ' a ' + DESC[z] + ' con ' + (rec % 1 ? '1\'30"' : rec + '\'') + ' trote';
+  return [t, '3 km calentamiento, ' + d + ', 2 km vuelta a la calma', WC.km + workKm + r * rec / PM.R, WC.min + work + r * rec];
+};
+const F  = (r) => ['Fartlek ' + r + '×1\'', '3 km calentamiento, ' + r + '×1\' rápido / 1\' suave, 2 km vuelta a la calma',
+  WC.km + r * (1 / PM.I + 1 / PM.R), WC.min + r * 2];
+const H  = (r, s) => ['Cuestas ' + r + '×' + s + '"', '3 km calentamiento, ' + r + ' subidas a esfuerzo de 5K, bajada trotando, 2 km suaves',
+  WC.km + r * (s / 60 / PM.I + 1.5 / PM.R), WC.min + r * (s / 60 + 1.5)];
+const TP = m => ['Tempo ' + m + '\' a umbral', '3 km calentamiento, ' + m + '\' a 4:30–4:38, 2 km vuelta a la calma', WC.km + m / PM.T, WC.min + m];
+const MR = k => [k + ' km a ritmo maratón', '2 km suave, ' + k + ' km a 4:55–5:00, 2 km suave', k + 4, 4 * PM.E + k * PM.MP];
+const PR = (e, m) => ['Progresivo ' + (e + m) + ' km', e + ' km suave + ' + m + ' km a RM', e + m, e * PM.E + m * PM.MP];
+const TEST = ['Test: media maratón a tope', '2 km suave + 21,1 km a tope (objetivo < 1:40) + 2 km trote', 25.1, 2 * PM.E + 100 + 2 * PM.R];
+const RACE_S = ['MARATÓN DE BADAJOZ', '42,2 km a 4:55–5:00. Sal conservador los 5 primeros km', 42.2, 210];
+const REST = ['Descanso', '', 0, 0];
+const GYM = ['Fuerza en gimnasio', 'Glúteo medio, sentadilla unipodal, puente, peso muerto rumano y gemelo', 0, 40];
+const MOB = ['Movilidad suave', 'Sin fuerza esta semana: estiramientos y movilidad de cadera', 0, 20];
+
+// [fase, nota, rodaje del lunes, calidad martes, rodaje miércoles, calidad jueves, tirada domingo]
 const PLAN = [
- ['Base','Adaptación', H(8,30), E(7), PR(5,2), E(5,6), L(14)],
- ['Base','', I('Fartlek 8×1\'', '8×1\' rápido / 1\' suave', 10), E(8), TP(15), E(5,6), L(16)],
- ['Base','', H(10,45), E(8), I('2×10\' a umbral', '2×10\' a 4:30–4:38 con 3\' trote', 10), E(6,8), L(18)],
- ['Base','Descarga', I('Fartlek 6×1\'', '6×1\' rápido / 1\' suave', 8), E(6), PR(4,2), E(5,6), L(14)],
- ['Construcción','', I('5×1 km a umbral', '5×1 km a 4:30–4:38 con 2\' trote', 10), E(9), I('2×3 km a RM', '2×3 km a 4:55–5:00 con 3\' trote', 11), E(6,6), L(20)],
- ['Construcción','', I('6×1 km a umbral', '6×1 km a 4:30–4:38 con 2\' trote', 11), E(9), I('2×4 km a RM', '2×4 km a 4:55–5:00 con 3\' trote', 13), E(6,6), L(22)],
- ['Construcción','', I('5×3\' VO2máx', '5×3\' a 4:08–4:15 con 2\' trote', 9), E(10), TP(25), E(7,8), L(24,5)],
- ['Construcción','Descarga', I('10×200 m rápidos', '10×200 m a 3:35–3:50 con 1\'30" trote', 7), E(8), TP(15), E(6), L(18)],
- ['Construcción','', I('4×2 km a umbral', '4×2 km a 4:30–4:38 con 3\' trote', 14), E(10), MR(8), E(7,6), L(26)],
- ['Construcción','Test el domingo', I('6×1 km a umbral', '6×1 km a 4:30–4:38 con 2\' trote', 11), E(10), E(8,6), E(5,4), ['Test: media maratón a tope', '2 km suave + 21,1 km a tope (objetivo < 1:40) + 2 km trote', 25]],
- ['Específico','', I('3×3 km a umbral', '3×3 km a 4:30–4:38 con 3\' trote', 15), E(11), MR(12), E(7,6), L(28,8)],
- ['Específico','Descarga', I('5×1 km a umbral', '5×1 km a 4:30–4:38 con 2\' trote', 10), E(9), MR(6), E(6,6), L(22)],
- ['Específico','Primera de 30 km', I('4×2 km a umbral', '4×2 km a 4:30–4:38 con 3\' trote', 14), E(11), I('2×5 km a RM', '2×5 km a 4:55–5:00 con 3\' trote', 15), E(7,6), L(30,6)],
- ['Específico','Semana pico', I('6×1 km a umbral', '6×1 km a 4:30–4:38 con 2\' trote', 11), E(11), MR(10), E(7,6), L(32,5)],
- ['Tapering','', I('5×1 km a umbral', '5×1 km a 4:30–4:38 con 2\' trote', 10), E(10), MR(8), E(6,6), L(24,6)],
- ['Tapering','', I('4×1 km a umbral', '4×1 km a 4:30–4:38 con 2\' trote', 9), E(8), MR(6), E(6,4), L(16,4)],
- ['Tapering','Semana de carrera', I('4×1 km a RM', '4×1 km a 4:55–5:00 con 2\' trote', 9), E(6), PR(4,2), E(4,4), ['MARATÓN DE BADAJOZ', '42,2 km a 4:55–5:00. Sal conservador los 5 primeros km', 42.2]],
+ ['Base','Adaptación', E(5,6), H(8,30), E(7), PR(5,2), L(14)],
+ ['Base','', E(5,6), F(8), E(8), TP(15), L(16)],
+ ['Base','', E(6,8), H(10,45), E(8), I('2×10\' a umbral', 2,10,'min','T',3), L(18)],
+ ['Base','Descarga', E(5,6), F(6), E(6), PR(4,2), L(14)],
+ ['Construcción','', E(6,6), I('5×1 km a umbral', 5,1,'km','T',2), E(9), I('2×3 km a RM', 2,3,'km','MP',3), L(20)],
+ ['Construcción','', E(6,6), I('6×1 km a umbral', 6,1,'km','T',2), E(9), I('2×4 km a RM', 2,4,'km','MP',3), L(22)],
+ ['Construcción','', E(7,8), I('5×3\' VO2máx', 5,3,'min','I',2), E(10), TP(25), L(24,5)],
+ ['Construcción','Descarga', E(6), I('10×200 m rápidos', 10,0.2,'km','S',1.5), E(8), TP(15), L(18)],
+ ['Construcción','', E(7,6), I('4×2 km a umbral', 4,2,'km','T',3), E(10), MR(8), L(26)],
+ ['Construcción','Test el domingo', E(7,6), I('6×1 km a umbral', 6,1,'km','T',2), E(10), E(6,4), TEST],
+ ['Específico','', E(7,6), I('3×3 km a umbral', 3,3,'km','T',3), E(11), MR(12), L(28,8)],
+ ['Específico','Descarga', E(6,6), I('5×1 km a umbral', 5,1,'km','T',2), E(9), MR(6), L(22)],
+ ['Específico','Primera de 30 km', E(7,6), I('4×2 km a umbral', 4,2,'km','T',3), E(11), I('2×5 km a RM', 2,5,'km','MP',3), L(30,6)],
+ ['Específico','Semana pico', E(7,6), I('6×1 km a umbral', 6,1,'km','T',2), E(11), MR(10), L(32,5)],
+ ['Tapering','', E(6,6), I('5×1 km a umbral', 5,1,'km','T',2), E(10), MR(8), L(24,6)],
+ ['Tapering','', E(6,4), I('4×1 km a umbral', 4,1,'km','T',2), E(8), MR(6), L(16,4)],
+ ['Tapering','Semana de carrera', E(5,4), I('4×1 km a RM', 4,1,'km','MP',2), E(6), PR(3,2), RACE_S],
 ];
 
 const DN = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
@@ -84,31 +108,40 @@ const MN = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','d
 const day = (w, d) => { const x = new Date(START); x.setDate(x.getDate() + w * 7 + d); return x; };
 const key = x => x.getFullYear() + '-' + (x.getMonth() + 1) + '-' + x.getDate();
 const fmt = x => x.getDate() + ' ' + MN[x.getMonth()];
+const hm = m => { m = Math.round(m / 5) * 5; return m >= 60 ? Math.floor(m / 60) + 'h' + String(m % 60).padStart(2, '0') : m + ' min'; };
+const kmf = k => (Math.round(k * 10) / 10).toString().replace('.', ',');
 const now = new Date(); const todayKey = key(now);
 
 let done = {};
 try { done = JSON.parse(localStorage.getItem('plan-done') || '{}'); } catch (e) {}
 const save = () => { try { localStorage.setItem('plan-done', JSON.stringify(done)); } catch (e) {} };
 
-const sessions = w => { const p = PLAN[w]; return [REST, p[2], p[3], p[4], GYM, p[5], p[6]]; };
+// Semana: lun rodaje · mar calidad · mié rodaje + fuerza · jue calidad · vie fuerza · sáb descanso · dom tirada
+const sessions = w => {
+  const p = PLAN[w], light = w === 9 || w === 16;  // semana de test y de carrera: sin fuerza
+  const wed = light ? p[4] : [p[4][0] + ' + fuerza', p[4][1] + '. Después, 30\' de fuerza de glúteo y cadera', p[4][2], p[4][3] + 30];
+  return [p[2], p[3], wed, p[5], light ? MOB : GYM, REST, p[6]];
+};
+const meta = s => (s[2] ? kmf(s[2]) + ' km · ' : '') + (s[3] ? '~' + hm(s[3]) : '');
 
-let html = '', total = 0, curW = -1, todayS = null;
+let html = '', total = 0, todayS = null;
 PLAN.forEach((p, w) => {
   const ss = sessions(w), first = day(w, 0), last = day(w, 6);
   const km = Math.round(ss.reduce((a, s) => a + s[2], 0));
+  const mins = ss.reduce((a, s) => a + s[3], 0);
   const isCur = now >= first && now < new Date(last.getFullYear(), last.getMonth(), last.getDate() + 1);
-  if (isCur) curW = w;
   let rows = '';
   ss.forEach((s, d) => {
-    const dt = day(w, d), k = key(dt), runnable = s[2] > 0 || s === GYM;
-    if (k === todayKey) todayS = { s, dt, w };
-    if (runnable) total++;
+    const dt = day(w, d), k = key(dt), trackable = s[3] > 0;
+    if (k === todayKey) todayS = { s, w };
+    if (trackable) total++;
     rows += '<tr class="' + (k === todayKey ? 'hoy ' : '') + (done[k] ? 'done' : '') + '" data-k="' + k + '">' +
       '<td class="dia">' + DN[d] + '<br>' + fmt(dt) + '</td>' +
-      '<td><div class="ses">' + s[0] + (s[2] ? ' <span class="det">· ' + s[2] + ' km</span>' : '') + '</div>' + (s[1] ? '<div class="det">' + s[1] + '</div>' : '') + '</td>' +
-      '<td class="ck">' + (runnable ? '<input type="checkbox" aria-label="Completado ' + fmt(dt) + '"' + (done[k] ? ' checked' : '') + '>' : '') + '</td></tr>';
+      '<td><div class="ses">' + s[0] + '</div>' + (s[3] ? '<div class="meta">' + meta(s) + '</div>' : '') +
+      (s[1] ? '<div class="det">' + s[1] + '</div>' : '') + '</td>' +
+      '<td class="ck">' + (trackable ? '<input type="checkbox" aria-label="Completado ' + fmt(dt) + '"' + (done[k] ? ' checked' : '') + '>' : '') + '</td></tr>';
   });
-  html += '<details' + (isCur ? ' open' : '') + ' id="w' + w + '"><summary><span>Semana ' + (w + 1) + ' · ' + p[0] + '</span><small>' + fmt(first) + '–' + fmt(last) + ' · ' + km + ' km</small></summary>' +
+  html += '<details' + (isCur ? ' open' : '') + '><summary><span>Semana ' + (w + 1) + ' · ' + p[0] + '</span><small>' + fmt(first) + '–' + fmt(last) + '<br>' + km + ' km · ' + hm(mins) + '</small></summary>' +
     (p[1] ? '<div class="note">' + p[1] + '</div>' : '') + '<table>' + rows + '</table></details>';
 });
 document.getElementById('weeks').innerHTML = html;
@@ -116,7 +149,8 @@ document.getElementById('weeks').innerHTML = html;
 const daysLeft = Math.ceil((RACE - new Date(now.getFullYear(), now.getMonth(), now.getDate())) / 864e5);
 document.getElementById('sub').textContent = daysLeft > 0 ? 'Faltan ' + daysLeft + ' días · domingo 7 mar 2027' : 'Carrera: 7 mar 2027';
 const T = document.getElementById('today');
-if (todayS) T.innerHTML = '<div class="lbl">Hoy · ' + DN[(now.getDay() + 6) % 7] + ' ' + fmt(now) + ' · semana ' + (todayS.w + 1) + '</div><div class="t">' + todayS.s[0] + (todayS.s[2] ? ' · ' + todayS.s[2] + ' km' : '') + '</div><div class="d">' + (todayS.s[1] || 'Recupera bien.') + '</div>';
+if (todayS) T.innerHTML = '<div class="lbl">Hoy · ' + DN[(now.getDay() + 6) % 7] + ' ' + fmt(now) + ' · semana ' + (todayS.w + 1) + '</div><div class="t">' + todayS.s[0] + '</div>' +
+  (todayS.s[3] ? '<div class="meta">' + meta(todayS.s) + '</div>' : '') + '<div class="d">' + (todayS.s[1] || 'Recupera bien.') + '</div>';
 else T.innerHTML = '<div class="lbl">Hoy</div><div class="t">' + (now < START ? 'El plan empieza el ' + fmt(START) : 'Plan terminado') + '</div>';
 
 function progress() {
