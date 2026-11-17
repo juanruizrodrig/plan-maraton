@@ -20,8 +20,8 @@ Reloj Garmin ⇄ Garmin Connect ⇄ Intervals.icu ⇄ Servidor MCP (Cloudflare) 
 | Conector "Garmin Coach" en claude.ai | ✅ Conectado |
 | Leer actividades | ✅ Probado |
 | Crear y borrar entrenamientos hasta el reloj | ✅ Probado de punta a punta |
-| Datos de salud (HRV, sueño, FC en reposo) | ❌ Llegan vacíos |
-| Historial en Intervals.icu | ⚠️ Solo desde el 8 nov 2026 |
+| Datos de salud (HRV, sueño, FC en reposo) | ✅ Llegan desde el 16–17 nov 2026 (HRV, FC en reposo, sueño, VO2máx) |
+| Historial en Intervals.icu | ⏳ Compartido en Garmin el 17 nov. A esa hora aún no había llegado nada anterior al 8 nov |
 | Zonas de FC | ⚠️ FC máxima mal configurada (170) |
 | Proyecto "Entrenador running" en claude.ai | ⏳ Sin crear |
 | Plan ajustado a mi volumen real | ⏳ Pendiente (calculado con 40 km, el real es ~30 km) |
@@ -31,7 +31,9 @@ Reloj Garmin ⇄ Garmin Connect ⇄ Intervals.icu ⇄ Servidor MCP (Cloudflare) 
 ## Pendiente ahora (en orden)
 
 ### Intervals.icu
-- [ ] Settings → Integrations → Garmin: activar la descarga de **wellness** (HRV, sueño, FC en reposo)
+- [x] Activar la descarga de **wellness** (HRV, sueño, FC en reposo). Llega desde el 17 nov
+- [x] Compartir los **datos históricos** de Garmin con Intervals.icu (17 nov)
+- [ ] Comprobar que llega el historial anterior al 8 nov. Si no aparece en 24–48 h, seguir con E1
 - [ ] Settings → Sports → Run: corregir la **FC máxima** y revisar zonas
 - [ ] Dormir con el fenix puesto para que mida el HRV nocturno
 
@@ -90,3 +92,4 @@ Reloj Garmin ⇄ Garmin Connect ⇄ Intervals.icu ⇄ Servidor MCP (Cloudflare) 
 | 16 nov 2026 | Probado de punta a punta: lectura, creación y borrado de entrenamientos hasta el fenix 7 |
 | 16 nov 2026 | Primer análisis real: ~30 km/semana en 3 salidas, rodajes suaves demasiado rápidos, wellness vacío |
 | 17 nov 2026 | Solicitada la exportación completa de datos de Garmin (evolutivo E1) |
+| 17 nov 2026 | Compartidos los datos históricos de Garmin con Intervals.icu. El wellness ya llega (HRV 85, FC en reposo 41, sueño 6h36). El historial antiguo todavía no |
