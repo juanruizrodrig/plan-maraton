@@ -23,7 +23,7 @@ Reloj Garmin ⇄ Garmin Connect ⇄ Intervals.icu ⇄ Servidor MCP (Cloudflare) 
 | Datos de salud (HRV, sueño, FC en reposo) | ✅ Llegan desde el 16–17 nov 2026 (HRV, FC en reposo, sueño, VO2máx) |
 | Conector usable también desde Claude Code | ✅ Comprobado el 17 nov |
 | Página del plan en el móvil | ✅ Publicada |
-| Recordatorio de la revisión del domingo | ✅ Evento el 22 nov a las 21:00 en Google Calendar |
+| Recordatorio de la revisión del domingo | ✅ Evento el 22 nov a las 13:00 en Google Calendar |
 | Historial en Intervals.icu | ⏳ Compartido en Garmin el 17 nov. Revisado de nuevo ese día: solo 12 actividades, todas desde el 8 nov |
 | Zonas de FC | ⚠️ FC máxima mal configurada (170) |
 | Proyecto "Entrenador running" en claude.ai | ✅ Creado y configurado el 17 nov |
@@ -43,7 +43,7 @@ Reloj Garmin ⇄ Garmin Connect ⇄ Intervals.icu ⇄ Servidor MCP (Cloudflare) 
 - [x] Crear el Proyecto **"Entrenador running"** y pegar las instrucciones (17 nov)
 - [x] Subir al conocimiento del Proyecto el plan (`index.html`) y el documento **Bitácora**
 - [x] Activar Garmin Coach en los chats del Proyecto y hacer el primer chat de prueba
-- [ ] Primera **revisión semanal**: domingo 22 nov, 21:00 (evento en Google Calendar)
+- [ ] Primera **revisión semanal**: domingo 22 nov, 13:00 (evento en Google Calendar)
 
 ### Móvil
 - [ ] Instalar la app **Claude** (Anthropic) e iniciar sesión
@@ -80,7 +80,7 @@ Reloj Garmin ⇄ Garmin Connect ⇄ Intervals.icu ⇄ Servidor MCP (Cloudflare) 
 |---|---|---|
 | Cada día | Reloj y esta página | Entrenar y marcar la casilla |
 | Si no puedo un día | Proyecto en claude.ai | "Hoy [día] no puedo por [motivo]. Reajusta la semana" |
-| Domingo, 21:00 (evento en Google Calendar) | Proyecto en claude.ai | "Revisión semanal", pegar el bloque en la Bitácora y aprobar la semana siguiente |
+| Domingo, 13:00 (evento en Google Calendar) | Proyecto en claude.ai | "Revisión semanal", pegar el bloque en la Bitácora y aprobar la semana siguiente |
 | Si cambian semanas futuras | Claude Code | Actualizar `index.html` y la página |
 
 ---
