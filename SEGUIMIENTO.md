@@ -22,7 +22,8 @@ Reloj Garmin ⇄ Garmin Connect ⇄ Intervals.icu ⇄ Servidor MCP (Cloudflare) 
 | Crear y borrar entrenamientos hasta el reloj | ✅ Probado de punta a punta |
 | Datos de salud (HRV, sueño, FC en reposo) | ✅ Llegan desde el 16–17 nov 2026 (HRV, FC en reposo, sueño, VO2máx) |
 | Conector usable también desde Claude Code | ✅ Comprobado el 17 nov |
-| Página del plan en el móvil | ✅ Publicada |
+| Página del plan en el móvil | ✅ Publicada y en la pantalla de inicio |
+| App de Claude en el móvil | ✅ Instalada |
 | Recordatorio de la revisión del domingo | ✅ Evento el 22 nov a las 13:00 en Google Calendar |
 | Historial en Intervals.icu | ⏳ Compartido en Garmin el 17 nov. Revisado de nuevo ese día: solo 12 actividades, todas desde el 8 nov |
 | Zonas de FC | ⚠️ FC máxima mal configurada (170) |
@@ -46,8 +47,8 @@ Reloj Garmin ⇄ Garmin Connect ⇄ Intervals.icu ⇄ Servidor MCP (Cloudflare) 
 - [ ] Primera **revisión semanal**: domingo 22 nov, 13:00 (evento en Google Calendar)
 
 ### Móvil
-- [ ] Instalar la app **Claude** (Anthropic) e iniciar sesión
-- [ ] Añadir la página del plan a la pantalla de inicio
+- [x] Instalar la app **Claude** (Anthropic) e iniciar sesión (17 nov)
+- [x] Añadir la página del plan a la pantalla de inicio (17 nov)
 
 ### Con Claude Code (recomendado antes de usarlo a fondo)
 - [ ] **E3: reducir lo que devuelve `getRecentActivities`.** Con solo 12 actividades ya devuelve ~53.000 caracteres. Al pedir 8–12 semanas en una revisión puede saturar la conversación
@@ -101,3 +102,4 @@ Reloj Garmin ⇄ Garmin Connect ⇄ Intervals.icu ⇄ Servidor MCP (Cloudflare) 
 | 17 nov 2026 | Creado en Google Calendar el evento del domingo 22 nov (montar el Proyecto + primera revisión semanal) |
 | 17 nov 2026 | Repaso de estado: el historial sigue sin llegar y E3 pasa a ser recomendado pronto |
 | 17 nov 2026 | Proyecto "Entrenador running" creado en claude.ai, con instrucciones, conocimiento (plan y Bitácora) y conector |
+| 17 nov 2026 | App de Claude instalada en el móvil y plan añadido a la pantalla de inicio |
