@@ -21,7 +21,10 @@ Reloj Garmin ⇄ Garmin Connect ⇄ Intervals.icu ⇄ Servidor MCP (Cloudflare) 
 | Leer actividades | ✅ Probado |
 | Crear y borrar entrenamientos hasta el reloj | ✅ Probado de punta a punta |
 | Datos de salud (HRV, sueño, FC en reposo) | ✅ Llegan desde el 16–17 nov 2026 (HRV, FC en reposo, sueño, VO2máx) |
-| Historial en Intervals.icu | ⏳ Compartido en Garmin el 17 nov. A esa hora aún no había llegado nada anterior al 8 nov |
+| Conector usable también desde Claude Code | ✅ Comprobado el 17 nov |
+| Página del plan en el móvil | ✅ Publicada |
+| Recordatorio de la revisión del domingo | ✅ Evento el 22 nov a las 21:00 en Google Calendar |
+| Historial en Intervals.icu | ⏳ Compartido en Garmin el 17 nov. Revisado de nuevo ese día: solo 12 actividades, todas desde el 8 nov |
 | Zonas de FC | ⚠️ FC máxima mal configurada (170) |
 | Proyecto "Entrenador running" en claude.ai | ⏳ Sin crear |
 
@@ -40,8 +43,16 @@ Reloj Garmin ⇄ Garmin Connect ⇄ Intervals.icu ⇄ Servidor MCP (Cloudflare) 
 - [ ] Crear el Proyecto **"Entrenador running"** y pegar las instrucciones (`entrenador-instrucciones.md`, lo que va debajo de `---`)
 - [ ] Poner la **fecha exacta** de la carrera en las instrucciones
 - [ ] Subir al conocimiento del Proyecto el plan (`index.html`) y un documento vacío **Bitácora**
-- [ ] Activar Garmin Coach en los chats del Proyecto
+- [ ] Activar Garmin Coach en los chats del Proyecto (lectura: "Permitir siempre"; escritura: "Permitir una vez")
 - [ ] Primer chat de prueba dentro del Proyecto
+- [ ] Primera **revisión semanal**: domingo 22 nov, 21:00 (evento en Google Calendar)
+
+### Móvil
+- [ ] Instalar la app **Claude** (Anthropic) e iniciar sesión
+- [ ] Añadir la página del plan a la pantalla de inicio
+
+### Con Claude Code (recomendado antes de usarlo a fondo)
+- [ ] **E3: reducir lo que devuelve `getRecentActivities`.** Con solo 12 actividades ya devuelve ~53.000 caracteres. Al pedir 8–12 semanas en una revisión puede saturar la conversación
 
 ---
 
@@ -51,7 +62,7 @@ Reloj Garmin ⇄ Garmin Connect ⇄ Intervals.icu ⇄ Servidor MCP (Cloudflare) 
 |---|---|---|---|
 | E1 | **Cargar mi historial de Garmin en Intervals.icu** a partir de la exportación completa de datos de Garmin | Con meses de historial, la forma y la fatiga (CTL/ATL), las zonas y el volumen habitual pasan a ser reales, y el plan se calibra mejor | 🟡 Exportación solicitada el 17 nov 2026. Falta recibirla y subir los archivos de actividades (FIT) a Intervals.icu |
 | E2 | Herramienta `getActivityIntervals` en el servidor | Ver cada serie por separado, no solo la media de la sesión, para ajustar bien los ritmos | ⏳ Propuesta |
-| E3 | Filtrar los campos que devuelve `getRecentActivities` | Poder analizar muchos meses sin saturar la conversación | ⏳ Propuesta |
+| E3 | Filtrar los campos que devuelve `getRecentActivities` | Poder analizar muchos meses sin saturar la conversación. Hoy 12 actividades ocupan ~53.000 caracteres | ⚠️ Recomendado pronto |
 | E4 | Seguridad de la página de login del conector: XSS en `state` y límite de intentos | Riesgo bajo, pero conviene cerrarlo | ⏳ Opcional |
 | E5 | Actualizar dependencias con avisos de seguridad (`agents`, MCP SDK) | 4 avisos altos que requieren subir de versión mayor | ⏳ Opcional |
 | E6 | Casillas de completado sincronizadas entre dispositivos, o marcadas solas a partir de Intervals.icu | Hoy solo se guardan en el navegador del móvil | ⏳ Idea |
@@ -71,7 +82,7 @@ Reloj Garmin ⇄ Garmin Connect ⇄ Intervals.icu ⇄ Servidor MCP (Cloudflare) 
 |---|---|---|
 | Cada día | Reloj y esta página | Entrenar y marcar la casilla |
 | Si no puedo un día | Proyecto en claude.ai | "Hoy [día] no puedo por [motivo]. Reajusta la semana" |
-| Domingo, 21:00 | Proyecto en claude.ai | "Revisión semanal", pegar el bloque en la Bitácora y aprobar la semana siguiente |
+| Domingo, 21:00 (evento en Google Calendar) | Proyecto en claude.ai | "Revisión semanal", pegar el bloque en la Bitácora y aprobar la semana siguiente |
 | Si cambian semanas futuras | Claude Code | Actualizar `index.html` y la página |
 
 ---
@@ -89,3 +100,5 @@ Reloj Garmin ⇄ Garmin Connect ⇄ Intervals.icu ⇄ Servidor MCP (Cloudflare) 
 | 16 nov 2026 | Primer análisis real: rodajes suaves demasiado rápidos y wellness vacío |
 | 17 nov 2026 | Solicitada la exportación completa de datos de Garmin (evolutivo E1) |
 | 17 nov 2026 | Compartidos los datos históricos de Garmin con Intervals.icu. El wellness ya llega (HRV 85, FC en reposo 41, sueño 6h36). El historial antiguo todavía no |
+| 17 nov 2026 | Creado en Google Calendar el evento del domingo 22 nov (montar el Proyecto + primera revisión semanal) |
+| 17 nov 2026 | Repaso de estado: el historial sigue sin llegar y E3 pasa a ser recomendado pronto |
