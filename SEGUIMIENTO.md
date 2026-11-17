@@ -26,7 +26,7 @@ Reloj Garmin ⇄ Garmin Connect ⇄ Intervals.icu ⇄ Servidor MCP (Cloudflare) 
 | Recordatorio de la revisión del domingo | ✅ Evento el 22 nov a las 21:00 en Google Calendar |
 | Historial en Intervals.icu | ⏳ Compartido en Garmin el 17 nov. Revisado de nuevo ese día: solo 12 actividades, todas desde el 8 nov |
 | Zonas de FC | ⚠️ FC máxima mal configurada (170) |
-| Proyecto "Entrenador running" en claude.ai | ⏳ Sin crear |
+| Proyecto "Entrenador running" en claude.ai | ✅ Creado y configurado el 17 nov |
 
 ---
 
@@ -40,11 +40,9 @@ Reloj Garmin ⇄ Garmin Connect ⇄ Intervals.icu ⇄ Servidor MCP (Cloudflare) 
 - [ ] Dormir con el fenix puesto para que mida el HRV nocturno
 
 ### claude.ai
-- [ ] Crear el Proyecto **"Entrenador running"** y pegar las instrucciones (`entrenador-instrucciones.md`, lo que va debajo de `---`)
-- [ ] Poner la **fecha exacta** de la carrera en las instrucciones
-- [ ] Subir al conocimiento del Proyecto el plan (`index.html`) y un documento vacío **Bitácora**
-- [ ] Activar Garmin Coach en los chats del Proyecto (lectura: "Permitir siempre"; escritura: "Permitir una vez")
-- [ ] Primer chat de prueba dentro del Proyecto
+- [x] Crear el Proyecto **"Entrenador running"** y pegar las instrucciones (17 nov)
+- [x] Subir al conocimiento del Proyecto el plan (`index.html`) y el documento **Bitácora**
+- [x] Activar Garmin Coach en los chats del Proyecto y hacer el primer chat de prueba
 - [ ] Primera **revisión semanal**: domingo 22 nov, 21:00 (evento en Google Calendar)
 
 ### Móvil
@@ -102,3 +100,4 @@ Reloj Garmin ⇄ Garmin Connect ⇄ Intervals.icu ⇄ Servidor MCP (Cloudflare) 
 | 17 nov 2026 | Compartidos los datos históricos de Garmin con Intervals.icu. El wellness ya llega (HRV 85, FC en reposo 41, sueño 6h36). El historial antiguo todavía no |
 | 17 nov 2026 | Creado en Google Calendar el evento del domingo 22 nov (montar el Proyecto + primera revisión semanal) |
 | 17 nov 2026 | Repaso de estado: el historial sigue sin llegar y E3 pasa a ser recomendado pronto |
+| 17 nov 2026 | Proyecto "Entrenador running" creado en claude.ai, con instrucciones, conocimiento (plan y Bitácora) y conector |
