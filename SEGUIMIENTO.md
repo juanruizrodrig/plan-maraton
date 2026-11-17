@@ -24,7 +24,6 @@ Reloj Garmin ⇄ Garmin Connect ⇄ Intervals.icu ⇄ Servidor MCP (Cloudflare) 
 | Historial en Intervals.icu | ⏳ Compartido en Garmin el 17 nov. A esa hora aún no había llegado nada anterior al 8 nov |
 | Zonas de FC | ⚠️ FC máxima mal configurada (170) |
 | Proyecto "Entrenador running" en claude.ai | ⏳ Sin crear |
-| Plan ajustado a mi volumen real | ⏳ Pendiente (calculado con 40 km, el real es ~30 km) |
 
 ---
 
@@ -41,11 +40,8 @@ Reloj Garmin ⇄ Garmin Connect ⇄ Intervals.icu ⇄ Servidor MCP (Cloudflare) 
 - [ ] Crear el Proyecto **"Entrenador running"** y pegar las instrucciones (`entrenador-instrucciones.md`, lo que va debajo de `---`)
 - [ ] Poner la **fecha exacta** de la carrera en las instrucciones
 - [ ] Subir al conocimiento del Proyecto el plan (`index.html`) y un documento vacío **Bitácora**
-- [ ] Activar Garmin Coach dentro del Proyecto
-
-### Con Claude Code
-- [ ] **Reajustar el plan** a mi punto de partida real: ~32 km/semana, de 3 a 5 salidas de forma gradual, pico ~70 km
-- [ ] Actualizar la página y sustituir `index.html` en el conocimiento del Proyecto
+- [ ] Activar Garmin Coach en los chats del Proyecto
+- [ ] Primer chat de prueba dentro del Proyecto
 
 ---
 
@@ -90,6 +86,6 @@ Reloj Garmin ⇄ Garmin Connect ⇄ Intervals.icu ⇄ Servidor MCP (Cloudflare) 
 | 16 nov 2026 | Reglas de reajuste semanal y bitácora añadidas a las instrucciones |
 | 16 nov 2026 | Nueva `MCP_PASSWORD` y conector Garmin Coach añadido en claude.ai |
 | 16 nov 2026 | Probado de punta a punta: lectura, creación y borrado de entrenamientos hasta el fenix 7 |
-| 16 nov 2026 | Primer análisis real: ~30 km/semana en 3 salidas, rodajes suaves demasiado rápidos, wellness vacío |
+| 16 nov 2026 | Primer análisis real: rodajes suaves demasiado rápidos y wellness vacío |
 | 17 nov 2026 | Solicitada la exportación completa de datos de Garmin (evolutivo E1) |
 | 17 nov 2026 | Compartidos los datos históricos de Garmin con Intervals.icu. El wellness ya llega (HRV 85, FC en reposo 41, sueño 6h36). El historial antiguo todavía no |
