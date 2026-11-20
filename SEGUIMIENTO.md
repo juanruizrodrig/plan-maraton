@@ -65,6 +65,7 @@ Reloj Garmin ⇄ Garmin Connect ⇄ Intervals.icu ⇄ Servidor MCP (Cloudflare) 
 | E4 | Seguridad de la página de login del conector: XSS en `state` y límite de intentos | Riesgo bajo, pero conviene cerrarlo | ⏳ Opcional |
 | E5 | Actualizar dependencias con avisos de seguridad (`agents`, MCP SDK) | 4 avisos altos que requieren subir de versión mayor | ⏳ Opcional |
 | E6 | Casillas de completado sincronizadas entre dispositivos, o marcadas solas a partir de Intervals.icu | Hoy solo se guardan en el navegador del móvil | ⏳ Idea |
+| E7 | Duración estimada en el nombre de cada entreno (" · ~NN'"), para verla en el reloj | Saber de un vistazo cuánto dura la sesión | ✅ Hecho el 20 nov 2026: desplegado y comprobado en el fenix 7 |
 
 ### E1: pasos previstos
 1. Esperar el correo de Garmin con el enlace de descarga. Puede tardar días.
@@ -103,3 +104,4 @@ Reloj Garmin ⇄ Garmin Connect ⇄ Intervals.icu ⇄ Servidor MCP (Cloudflare) 
 | 17 nov 2026 | Repaso de estado: el historial sigue sin llegar y E3 pasa a ser recomendado pronto |
 | 17 nov 2026 | Proyecto "Entrenador running" creado en claude.ai, con instrucciones, conocimiento (plan y Bitácora) y conector |
 | 17 nov 2026 | App de Claude instalada en el móvil y plan añadido a la pantalla de inicio |
+| 20 nov 2026 | E7: el servidor añade la duración estimada al nombre de los entrenos («Tirada larga 16 km · ~93'»). Desplegado, con 7 tests, y comprobado en Garmin Connect |
